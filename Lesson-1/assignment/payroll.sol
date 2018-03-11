@@ -5,12 +5,12 @@ contract Payroll {
     address employer;
     
     // employee info
-    // TODO: those fileds could be encapsulated into a struct
+    // those fileds could be encapsulated into a struct eventually
     uint salary;
     address employee;
     uint lastPayday;
     
-    uint constant payDuration = 2 seconds;
+    uint constant payDuration = 30 days;
     
     function Payroll() {
         employer = msg.sender;
