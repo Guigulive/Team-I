@@ -28,6 +28,21 @@ contract payRollHomework {
         lastPayday = now;
     }
     
+    //add function to change address
+    function updateAddress(address addr){
+        require(msg.sender == owner);
+        
+        if(employee != 0x0){
+        employee = addr;    
+        }
+    }
+    
+    //add function to change salary
+    function updateSalary(uint sal){
+        require(msg.sender == owner);
+        salary = sal * 1 ether;
+    }
+    
     function addFund() payable returns (uint){
         return this.balance;
     }
