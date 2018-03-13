@@ -1,0 +1,60 @@
+pragma solidity ^0.4.14;
+
+contract payRollHomework {
+    uint constant payDuration = 10 seconds;
+
+    address owner;     //the employer's address
+       uint salary;    // employee's salary
+    address employee;  //employee's address
+       uint lastPayday;//the last date of payment
+
+    // constructor,once deploy, set owner as as the owner of contract
+    function payRollHomework() {
+        owner = msg.sender;
+        salary = 1;
+    }
+    
+    //udpate the address and salary to the other employee
+    function updateEmployee(address e, uint s) {
+        require(msg.sender == owner);
+    
+        if(employee != 0x0) {
+            uint payment = salary * (now - lastPayday) / payDuration;
+            employee.transfer(payment);
+        }
+    
+        employee = e;
+        salary = s * 1 ether;
+        lastPayday = now;
+    }
+    
+    function addFund() payable returns (uint){
+        return this.balance;
+    }
+    
+    function calculateRunway() returns (uint) {
+        return this.balance / salary;
+    }
+    
+    function hasEnoughFund() returns (bool) {
+        return calculateRunway() > 0;
+    }
+    
+    function getPaid() returns(uint){
+        //if(msg.sender != employee){
+        //    revert();
+        //}
+        require(msg.sender == employee);  //same as if(msg.sender) != owner) {throw;}
+        
+        uint nextPayday = lastPayday +payDuration;
+        require(nextPayday < now); //changed from assert,due to assert would use all gas
+        
+        lastPayday = nextPayday;
+        employee.transfer(salary);
+    }
+    
+    //search the balance of the address,uint256 is the normal method,which mean 2^256
+    function getBalance(address addr) public returns (uint256){
+        return addr.balance;
+    }
+}
