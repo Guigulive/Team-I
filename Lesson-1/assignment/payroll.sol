@@ -1,8 +1,8 @@
 pragma solidity ^0.4.14;
 
 contract Payroll {
-    // employer info
-    address employer;
+    // owner info
+    address owner;
     
     // employee info
     // those fileds could be encapsulated into a struct eventually
@@ -13,13 +13,23 @@ contract Payroll {
     uint constant payDuration = 30 days;
     
     function Payroll() {
-        employer = msg.sender;
+        owner = msg.sender;
     }
 
-    function setEmployee(address _employee, uint _salary) {
-        // only the employer can decide the salary of employees
-        if(msg.sender != employer) {
+    function updateEmployee(address _employee, uint _salary) {
+        // only the owner can decide the salary of employees
+        if(msg.sender != owner) {
             revert();
+        }
+        
+        if(_employee == 0x0) {
+            revert();
+        }
+        
+        if(employee != 0x0) {
+            // pay the due before the new salary adjustment
+            uint payment = (salary * (now - lastPayday)) / payDuration;
+            employee.transfer(payment);
         }
         
         employee = _employee;
