@@ -17,15 +17,15 @@ contract payRollHomework {
     //udpate the address and salary to the other employee
     function updateEmployee(address e, uint s) {
         require(msg.sender == owner);
-    
+        //all of empty addres start by 0x0
         if(employee != 0x0) {
             uint payment = salary * (now - lastPayday) / payDuration;
             employee.transfer(payment);
         }
-    
-        employee = e;
-        salary = s * 1 ether;
-        lastPayday = now;
+        
+        employee = e;          //update employee's address
+        salary = s * 1 ether;  //update the salary
+        lastPayday = now;      //update the last day to pay salary
     }
     
     //add function to change address
@@ -43,18 +43,19 @@ contract payRollHomework {
         salary = sal * 1 ether;
     }
     
+    //increase eth to smartcontract
     function addFund() payable returns (uint){
         return this.balance;
     }
-    
+    //check the balance
     function calculateRunway() returns (uint) {
         return this.balance / salary;
     }
-    
+    //check whether enough balance
     function hasEnoughFund() returns (bool) {
         return calculateRunway() > 0;
     }
-    
+    //pay eth to employee
     function getPaid() returns(uint){
         //if(msg.sender != employee){
         //    revert();
