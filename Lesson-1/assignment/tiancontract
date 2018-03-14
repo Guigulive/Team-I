@@ -7,7 +7,7 @@ contract employee {
     
     //设置员工地址
     function setAddr(address addr) public {
-        owner = x;
+        owner = addr;
     }
 
    //获取员工地址
