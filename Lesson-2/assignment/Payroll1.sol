@@ -60,7 +60,7 @@ contract Payroll {
         
         _partialPay(employee);
                 
-        employees[index].salary = salary;
+        employees[index].salary = salary * 1 ether;
         employees[index].lastPayday = now;
     }
     
