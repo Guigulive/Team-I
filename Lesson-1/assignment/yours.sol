@@ -1,7 +1,7 @@
 /*作业请提交在这个目录下*/
 pragma solidity ^0.4.14;
 
-contract PayrallHomeWork {
+contract PayrollHomeWork {
     address employee ;
     address owner;
 	uint salary = 1 wei;
@@ -9,7 +9,7 @@ contract PayrallHomeWork {
     uint constant payDuation = 10 seconds;
     uint lastPayday = now;
 
-    function PayrallHomeWork() {
+    function PayrollHomeWork() {
         owner = msg.sender;
     }
 
