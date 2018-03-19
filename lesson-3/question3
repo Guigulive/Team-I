@@ -1,0 +1,28 @@
+contract O
+contract A is O
+contract B is O
+contract C is O
+contract K1 is A, B
+contract K2 is A, C
+contract Z is K1, K2
+
+L(O) := [O] // the linearization of O is trivially the singleton list [O], because O has no parents
+L(A) := [A] + merge(L(O), [O])  // the linearization of A is A plus the merge of its parents' linearizations with the list of parents
+      = [A] + merge([O], [O])
+      = [A, O] // which simply prepends A to its single parent's linearization
+L(B) := [B, O]  // linearizations of B and Care computed similar to that of A
+L(C) := [C, O]
+L(K1) := [K1] + merge(L(A), L(B), [A, B]) // first, find the linearizations of K1's parents, L(A) and L(B), and merge them with the parent list [A, B]
+       = [K1] + merge([A, O], [B, O], [A, B]) // class A is a good candidate for the first merge step, because it only appears as the head of the first and last lists
+       = [K1, A] + merge([O], [B, O], [B]) // class O is not a good candidate for the next merge step, because it also appears in the tail of list 2; but class B is a good candidate
+       = [K1, A, B] + merge([O], [O]) // finally, class O is a valid candidate, which also exhausts all remaining lists
+       = [K1, A, B, O]
+L(K2) := [K2, A, C, O]  // same stuff like above just replace B with C
+L(Z) := [Z] + merge(L(K1), L(K2), [K1, K2])
+      = [Z] + merge([K1, A, B, O], [K2, A, C, O], [K1, K2]) // select K1
+      = [Z, K1] + merge([A, B, O], [K2, A, C, O], [K2]) // fail A, select K2
+      = [Z, K1, K2] + merge([A, B, O], [A, C, O]) // fail A, select B
+      = [Z, K1, K2, B] + merge([A, O], [A, C, O]) // fail A, select C
+      = [Z, K1, K2, B, C] + merge([A, O], [A, O]) // select A
+      = [Z, K1, K2, B, C, A] + merge([O), [O])
+      = [Z, K1, K2, B, C, A, O]
