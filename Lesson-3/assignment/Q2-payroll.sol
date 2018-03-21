@@ -87,8 +87,8 @@ contract Payroll is Ownable {
         lastPayday = employee.lastPayday;
     }
     
-    function getPaid() employeeExist(msg.sender) {
-        //get the reference to the entry in mapping
+    function getPaid() public employeeExist(msg.sender) {
+         //get the reference to the entry in mapping
         var employee = employees[msg.sender];
         
         uint nextPayday = employee.lastPayday.add(payDuration);
@@ -96,11 +96,21 @@ contract Payroll is Ownable {
         
         employees[msg.sender].lastPayday = nextPayday;
         employee.id.transfer(employee.salary);
-    }
-    
+     }
+
     // Only employees themselives can change the paryment address
-    function changePaymentAddress(address employeeId, address newAddress) public onlySelf(employeeId) employeeExist(employeeId) {
-      var employee = employees[employeeId];
-      employees[employeeId].id = newAddress;
+    function changeEmployeeAddress(address employeeId, address newEmployeeId) public onlyOwner employeeExist(employeeId) {
+        var employee = employees[employeeId];
+
+        // There is no entry of new employee in the employee list
+        var newEmployee = employees[newEmployeeId];
+        assert(newEmployee.id == 0x0);
+
+        _partialPay(employee);
+        
+        // Add the entry for the new employee
+        employees[newEmployeeId] = Employee(newEmployeeId, employee.salary, now);        
+        // Delete the entry for the old employee
+        delete employees[employeeId];
     }
 }
