@@ -85,7 +85,7 @@ contract Payroll is Ownable {
         lastPayday = employee.lastPayday;
     }
     
-    function getPaid() employeeExist(msg.sender) {
+    function getPaid() public employeeExist(msg.sender) {
         //get the reference to the entry in mapping
         var employee = employees[msg.sender];
         
