@@ -97,7 +97,7 @@ contract Payroll is Ownable {
 为了简化代码，用了onlyOwner，同时有一个疑问:changePaymentAddress唯一的可执行者是否应该是oldEmployeeId?
 如果唯一的可执行者是雇主（合约部署者）的话，合约的部署者完全可以自己开小号， 把地址改成自己的小号，黑掉员工的钱
 
-第二题：代码如上，编写了更改员工地址的changePaymentAddress函数，同时编写了modifier employeeNotExist，可以用来确认员工地址不存在
+ 第二题：代码如上，编写了更改员工地址的changePaymentAddress函数，同时编写了modifier employeeNotExist，可以用来确认员工地址不存在
 可用在addEmployee和changePaymentAddress中
 对于changePaymentAddress函数，注意的有两点：
 1.函数执行时切换为合约的部署者，领钱时切换为新的地址
