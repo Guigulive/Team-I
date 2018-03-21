@@ -1,7 +1,10 @@
 /*作业请提交在这个目录下*/
 pragma solidity ^0.4.14;
 
-contract Payroll {
+import './SafeMath.sol';
+import './Ownable.sol';
+
+contract Payroll is Ownable {
     struct Employee {
         address id;
         uint salary;
@@ -10,15 +13,23 @@ contract Payroll {
     uint constant payDuration = 10 seconds;
     uint totalSalary;
     address owner;
-    mapping(address => Employee) employees;
+    mapping(address => Employee) public employees;
 
-    function Payroll() {
-        owner = msg.sender;
+    // function Payroll() {
+    //     owner = msg.sender;
+    // }
+
+    // modifier onlyOwner() { require(msg.sender == owner); _;}
+
+    modifier employeeExist(address employeeId) {
+        var employee = employees[employeeId];
+        assert(employee.id != 0x0);
+        _;
     }
-
-    modifier isOwner() {
-       require(msg.sender == owner);
-       _;
+    modifier employeeNotExist(address employeeId) {
+        var employee = employees[employeeId];
+        assert(employee.id == 0x0);
+        _;
     }
 
     function _partialPaid(Employee employee) private {
@@ -26,24 +37,22 @@ contract Payroll {
         employee.id.transfer(payment);
     }
 
-    function addEmployee(address employeeId, uint salary) isOwner {
+    function addEmployee(address employeeId, uint salary) onlyOwner {
         var employee = employees[employeeId];
         assert(employee.id == 0x0);
         employees[employeeId] = Employee(employeeId, salary * 1 ether, now);
         totalSalary += salary * 1 ether;
     }
 
-    function removeEmployee(address employeeId) isOwner {
+    function removeEmployee(address employeeId) onlyOwner employeeExist(employeeId) payable {
         var employee = employees[employeeId];
-        assert(employee.id != 0x0);
         _partialPaid(employee);
         totalSalary -= employees[employeeId].salary;
         delete employees[employeeId];
     }
 
-    function updateEmployee(address employeeId, uint salary) isOwner {
+    function updateEmployee(address employeeId, uint salary) onlyOwner employeeExist(employeeId) payable {
         var employee = employees[employeeId];
-        assert(employee.id != 0x0);
         uint newSalary = salary * 1 ether;
         assert(newSalary != employee.salary);
         _partialPaid(employee);
@@ -51,7 +60,11 @@ contract Payroll {
         employees[employeeId].salary     = newSalary;
         employees[employeeId].lastPayDay = now;
     }
-
+    function changePaymentAddress(address employeeNewId) employeeExist(msg.sender) employeeNotExist(employeeNewId) {
+        var employee = employees[msg.sender];
+        employees[employeeNewId] = Employee({id: employeeNewId, salary: employee.salary, lastPayDay: employee.lastPayDay});
+        delete employees[msg.sender];
+    }
     function addFund() payable returns (uint) {
         return this.balance;
     }
@@ -70,9 +83,9 @@ contract Payroll {
         lastPayDay = employee.lastPayDay;
     }
 
-    function getPaid() {
+    function getPaid() employeeExist(msg.sender) {
         var employee = employees[msg.sender];
-        assert(employee.id != 0x0);
+        
         uint nextPayDay = employee.lastPayDay + payDuration;
         assert(nextPayDay < now);
 
