@@ -98,7 +98,7 @@ contract Payroll is Ownable {
         employee.id.transfer(employee.salary);
      }
 
-    // Only employees themselives can change the paryment address
+    // Q2: Only employees themselives can change the paryment address
     function changeEmployeeAddress(address employeeId, address newEmployeeId) public onlyOwner employeeExist(employeeId) {
         var employee = employees[employeeId];
 
