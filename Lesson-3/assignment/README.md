@@ -12,3 +12,5 @@
 - contract K1 is A, B
 - contract K2 is A, C
 - contract Z is K1, K2
+
+答案: Z K1 B K2 A C O
