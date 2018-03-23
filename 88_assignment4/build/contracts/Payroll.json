@@ -87,7 +87,14 @@
         "constant": false,
         "input": [
           {
+              "name": "employeeId",
+              "type": "address"
           }
-        ]
-      }
+        ],
+        "name": "removeEmployee",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },  
 }
