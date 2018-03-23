@@ -59,4 +59,16 @@ contract Payroll{
         return this.balance / totalSalary;
     }
     
-    function hasEnoughFound() 
+    function hasEnoughFound() returns(bool){
+        return calculateRunway() > 0;
+    }
+    
+    function getPaid() employeeExist(msg.sender){
+        var employee = employees[msg.sender];
+        uint nextPayday = employee.lastPayday + payDuration;
+        assert(nextPayday < now);
+        employees[msg.sender].lastPayday = nextPayday;
+        employee.id.transfer(employee.salary);
+    }
+}
+    }
