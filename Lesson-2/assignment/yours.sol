@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /*作业请提交在这个目录下*/
+=======
+>>>>>>> Team-I/master
 pragma solidity ^0.4.14;
 
 contract Payroll {
@@ -12,7 +15,6 @@ contract Payroll {
 
     address owner;
     Employee[] employees;
-
     function Payroll() {
         owner = msg.sender;
     }
