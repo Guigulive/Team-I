@@ -59,15 +59,19 @@ contract('Payroll', function(accounts) {
   });
 
   it("Employee can get paid.", function() {
-    var before_balance = web3.fromWei(web3.eth.getBalance(account_one)).toNumber();
+    let before_balance = web3.eth.getBalance(account_one);
     return Payroll.deployed().then(function(instance) {
       payrollInstance = instance;
       increaseTime(pay_duration);
       forceMine();
       return payrollInstance.getPaid({from: account_one});
     }).then(function(res) {
-      var after_balance = web3.fromWei(web3.eth.getBalance(account_one)).toNumber();
-      assert.isAbove(after_balance-before_balance, 0.99, 'Employee get paid failed.');
+      let after_balance = web3.eth.getBalance(account_one);
+      let gasUsed = res.receipt.gasUsed;
+      let trans = web3.eth.getTransaction(res.tx);
+      let gasPrice = trans.gasPrice;
+      let tran_balance = before_balance.add(web3.toWei(1,'ether')).sub(after_balance).sub(gasPrice.mul(gasUsed));
+      assert.equal(tran_balance, 0, 'Employee get paid failed.');
     });
   });
 
