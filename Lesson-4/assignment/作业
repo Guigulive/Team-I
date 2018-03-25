@@ -1,0 +1,11 @@
+测试用例为 Payroll.js
+
+测试结果：
+
+  Contract: Payroll
+    ✓ Test call addEmployee() by owner (64ms)
+    ✓ Test call addEmployee() twice
+    ✓ Test call addEmployee() by other
+    ✓ Test call removeEmployee() by owner  (55ms)
+    ✓ Test remove non-exist employee
+    ✓ Test call removeEmployee() by other (66ms)
