@@ -26,7 +26,7 @@ contract('Payroll', function (accounts) {
         }).then(function () {
             return homeworkInstance.removeEmployee(accounts[1]);
         }).then(function () {
-            return homeworkInstance.employees.call(accounts[1]);
+            return  homeworkInstance.employees.call(accounts[1]);
         }).then(function (employee) {
             assert.equal(employee[0].valueOf(), 0x0, "fail")
         })
