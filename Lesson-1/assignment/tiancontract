@@ -1,0 +1,29 @@
+pragma solidity ^0.4.2;
+
+contract employee {
+
+    address owner;
+    unit pay;
+    
+    //设置员工地址
+    function setAddr(address addr) public {
+        owner = addr;
+    }
+
+   //获取员工地址
+    function getAddr() public constant returns (address) {
+        return  owner;
+    }
+    
+    //设置员工薪水
+     function setPay(unit newPay) public {
+        pay = newPay;
+    }
+
+    //获取员工薪水
+    function getPay() public constant returns (unint) {
+        return  pay;
+    }
+ }
+    
+    
