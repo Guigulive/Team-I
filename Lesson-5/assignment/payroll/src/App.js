@@ -64,7 +64,7 @@ class App extends Component {
       Payroll.deployed().then((instance) => {
         PayrollInstance = instance
         this.setState({
-          payroll: instance
+          payroll: PayrollInstance
         });
       })
     })

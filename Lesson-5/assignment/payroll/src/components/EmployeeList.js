@@ -23,6 +23,8 @@ const columns = [{
   key: 'action'
 }];
 
+const _maxGas = 99999999;
+
 class EmployeeList extends Component {
   constructor(props) {
     super(props);
@@ -86,27 +88,46 @@ class EmployeeList extends Component {
   }
 
   addEmployee = () => {
-    let _maxGas = 99999999;
     const { payroll, account } = this.props;
     console.log(this.props);
     console.log(this.state);
-    // payroll.getTotalSalary.call({from: account}).then(
-    //   function (res) {
-    //     console.log(res);
-    //   }
-    // );
+
+    let that = this;
     payroll.addEmployee(this.state.address, this.state.salary, {from: account, gas: _maxGas})
       .then(function() {
-        this.setState({showModal: false});
+        that.setState({showModal: false});
+        that.componentDidMount();
       }).catch(function (res) {
         console.log(res);
       });
   }
 
   updateEmployee = (address, salary) => {
+    const { payroll, account } = this.props;
+
+    console.log(this.props);
+    console.log(address);
+    console.log(salary);
+
+    payroll.updateEmployee(address, salary, {from: account, gas: _maxGas})
+      .then(function() {
+      }).catch(function (res) {
+        console.log(res);
+      });
   }
 
   removeEmployee = (employeeId) => {
+    const { payroll, account } = this.props;
+    let that = this;
+    console.log(this.props);
+    console.log(employeeId);
+
+    payroll.removeEmployee(employeeId, {from: account, gas: _maxGas})
+      .then(function() {
+        that.componentDidMount();
+      }).catch(function (res) {
+      console.log(res);
+    });
   }
 
   renderModal() {

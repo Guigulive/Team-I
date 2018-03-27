@@ -12,7 +12,7 @@ contract Payroll is Ownable {
         uint lastPayday;
     }
 
-    mapping(address=>Employee) employees;
+    mapping(address=>Employee) public employees;
     uint constant payDuration = 10 seconds;
     uint totalSalary;
     uint totalEmployee;
@@ -45,7 +45,7 @@ contract Payroll is Ownable {
 
     function _findEmployee(address employeeId) private returns (address, uint){
         for(var i=0;i<employeeList.length;i++){
-            if(employeeList[i].id == employeeId){
+            if(employeeList[i] == employeeId){
                 return (employeeList[i], i);
             }
         }
