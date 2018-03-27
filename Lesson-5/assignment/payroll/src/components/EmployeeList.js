@@ -65,9 +65,42 @@ class EmployeeList extends Component {
   }
 
   loadEmployees(employeeCount) {
+    const { payroll, account, web3 } = this.props;
+    const requests = [];
+
+    for (let index=0; index < employeeCount; index++) {
+      requests.push(payroll.checkEmployee.call(index, {from: account}));
+    }
+    Promise.all(requests).then(values => {
+      const employees = values.map(value=>({
+        key: value[0],
+        address: value[0],
+        salary: web3.fromWei(value[1].toNumber()),
+        lastPaidDay: new Date(value[2].toNumber() * 1000).toString()
+      }));
+      this.setState({
+        employees: employees,
+        loading: false
+      });
+    });
   }
 
   addEmployee = () => {
+    let _maxGas = 99999999;
+    const { payroll, account } = this.props;
+    console.log(this.props);
+    console.log(this.state);
+    // payroll.getTotalSalary.call({from: account}).then(
+    //   function (res) {
+    //     console.log(res);
+    //   }
+    // );
+    payroll.addEmployee(this.state.address, this.state.salary, {from: account, gas: _maxGas})
+      .then(function() {
+        this.setState({showModal: false});
+      }).catch(function (res) {
+        console.log(res);
+      });
   }
 
   updateEmployee = (address, salary) => {
