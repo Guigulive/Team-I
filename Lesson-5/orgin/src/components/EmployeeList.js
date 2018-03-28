@@ -65,15 +65,92 @@ class EmployeeList extends Component {
   }
 
   loadEmployees(employeeCount) {
+    const { account, payroll, web3 } = this.props;
+    const requests = [];
+
+    for (var i = 0; i < employeeCount; i++) {
+      requests.push(payroll.checkInfo.call(i, {
+        from : account
+      }))
+    }
+
+    Promise.all(requests).then(values => {
+           const employees = values.map(value => ({
+               key: value[0],
+               address: value[0],
+               salary: web3.fromWei(value[1].toNumber()),
+               lastPaidDay: new Date(value[2].toNumber() * 1000).toString(),
+           }));
+
+           this.setState({
+               employees,
+               loading: false
+           })
+      });
+
   }
 
   addEmployee = () => {
+
+    const { payroll, account } = this.props;
+        const { address, salary, employees } = this.state;
+        payroll.addEmployee(address, salary, {
+            from: account,
+            gas: 4000000
+        }).then(() => {
+            const newEmployee = {
+                address,
+                salary,
+                key: address,
+                lastPaidDay: new Date().toString()
+            }
+
+            this.setState({
+                address: '',
+                salary: '',
+                showModal: false,
+                employee: employees.concat([newEmployee])
+            });
+        });
+
   }
 
   updateEmployee = (address, salary) => {
+    const { payroll, account } = this.props;
+        const { employees } = this.state;
+        payroll.updateEmployee(address, salary, {
+            from: account,
+            gas:4000000
+        }).then(() => {
+            this.setState({
+                employees: employees.map((employee) => {
+                    if (employee.address === address) {
+                        employee.salary = salary;
+                    }
+
+                    return employee;
+                })
+            });
+        }).catch(() => {
+            message.error('fund is not enough');
+        });
   }
 
   removeEmployee = (employeeId) => {
+
+    const { payroll, account } = this.props;
+       const { employees } = this.state;
+       payroll.removeEmployee(employeeId, {
+           from: account,
+           gas:4000000
+       }).then((result) => {
+           this.setState({
+               employees: employees.filter(employee => employee.address !== employeeId)
+           });
+       }).catch(() => {
+           message.error('fund is not enough');
+       });
+
   }
 
   renderModal() {
