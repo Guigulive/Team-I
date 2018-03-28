@@ -10,11 +10,13 @@ class Common extends Component {
 
   componentDidMount() {
     const { payroll, web3 } = this.props;
-    const updateInfo = (error, result) => {
-      if (!error) {
-        this.checkInfo();
-      }
-    }
+    this.countdown = setInterval(this.checkInfo, 1000);
+
+    // const updateInfo = (error, result) => {
+    //   if (!error) {
+    //     this.checkInfo();
+    //   }
+    // }
 
     // this.newFund = payroll.NewFund(updateInfo);
     // this.getPaid = payroll.GetPaid(updateInfo);
@@ -26,6 +28,7 @@ class Common extends Component {
   }
 
   componentWillUnmount() {
+    clearInterval(this.countdown);
     // this.newFund.stopWatching();
     // this.getPaid.stopWatching();
     // this.newEmployee.stopWatching();
