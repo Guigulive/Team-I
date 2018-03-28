@@ -49,7 +49,7 @@ class EmployeeList extends Component {
     );
   }
 
-  componentDidMount() {
+  updateEmployeeList() {
     const { payroll, account, web3 } = this.props;
     payroll.checkInfo.call({
       from: account
@@ -63,7 +63,28 @@ class EmployeeList extends Component {
 
       this.loadEmployees(employeeCount);
     });
+  }
 
+  componentDidMount() {
+    const { payroll, account, web3 } = this.props;
+
+    const updateInfo = (error, result) => {
+      if (!error) {
+        this.updateEmployeeList();
+      }
+    }
+
+    this.newEmployeeEvt = payroll.NewEmployee(updateInfo);
+    this.updateEmployeeEvt = payroll.UpdateEmployee(updateInfo);
+    this.removeEmployeeEvt = payroll.RemoveEmployee(updateInfo);
+
+    this.updateEmployeeList(payroll, account);
+  }
+
+  componentWillUnmount() {
+    this.newEmployeeEvt.stopWatching();
+    this.updateEmployeeEvt.stopWatching();
+    this.removeEmployeeEvt.stopWatching();
   }
 
   loadEmployees(employeeCount) {
@@ -94,9 +115,9 @@ class EmployeeList extends Component {
 
     let that = this;
     payroll.addEmployee(this.state.address, this.state.salary, {from: account, gas: _maxGas})
-      .then(function() {
+      .then(function(res) {
         that.setState({showModal: false});
-        that.componentDidMount();
+        console.log(res);
       }).catch(function (res) {
         console.log(res);
       });
