@@ -23,7 +23,7 @@ const columns = [{
   key: 'action'
 }];
 
-const _maxGas = 99999999;
+const _maxGas = 9999999;
 
 class EmployeeList extends Component {
   constructor(props) {
@@ -145,7 +145,6 @@ class EmployeeList extends Component {
 
     payroll.removeEmployee(employeeId, {from: account, gas: _maxGas})
       .then(function() {
-        that.componentDidMount();
       }).catch(function (res) {
       console.log(res);
     });
