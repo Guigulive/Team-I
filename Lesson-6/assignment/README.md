@@ -1,4 +1,4 @@
-# payroll 
+# Payroll 
 A payroll system developed with React, Truffle and Solidty. 
 
 ## Get Started 
