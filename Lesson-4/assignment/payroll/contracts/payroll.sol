@@ -3,8 +3,12 @@
 pragma solidity ^0.4.14;
 
 import './Ownable.sol';
+import './SafeMath.sol';
 
 contract Payroll is Ownable{
+
+    using SafeMath for uint;
+
     struct Employee {
         address id;
         uint salary;
@@ -39,7 +43,8 @@ contract Payroll is Ownable{
         var employee = employees[employeeId];
 
         assert(employee.id == 0x0);
-        totalSalary +=salary * 1 ether;
+        salary = salary.mul(1 ether);
+        totalSalary = totalSalary.add(salary);
         employees[employeeId] = (Employee(employeeId, salary, now));
     }
 
