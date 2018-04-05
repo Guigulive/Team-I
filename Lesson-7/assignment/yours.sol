@@ -4,7 +4,8 @@ pragma solidity ^0.4.0;
 /* 
  * create DAO - deposit() + value - getBalance -100
  * new Attacker(dao.contract.address) + value - dao.getBalance = dao + attacker
- * attacker.attack - dao.getBalance, attacker.getBalance 
+ * attacker.attack - dao.getBalance, attacker.getBalance
+ * https://github.com/gfan8w/guigulive-operation/blob/master/Lesson7/assignment/DAO%20attack.txt
  */
 
 contract DAO {
